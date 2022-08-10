@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Security.Claims;
 using Planitly.Backend.Models;
 using Planitly.Backend.Repositories;
@@ -36,6 +37,16 @@ namespace Planitly.Backend.Services
             }
 
             return savedEvent;
+        }
+
+        public ICollection<Event> GetEvents(ClaimsPrincipal user, bool isAuthor, bool isParticipating)
+        {
+            var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var eventsAsAuthor = this._eventParticipantRepository.GetByAuthorId(userId);
+            Console.WriteLine(eventsAsAuthor);
+
+            throw new NotImplementedException();
         }
     }
 }

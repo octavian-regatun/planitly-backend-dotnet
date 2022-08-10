@@ -1,4 +1,5 @@
 using Google.Apis.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Planitly.Backend.Services;
 
@@ -16,10 +17,17 @@ namespace Planitly.Backend.Controllers
             this._jwtService = jwtService;
         }
 
-        [HttpPost("google")]
-        public ActionResult Google([FromBody] string tokenId)
+        [Authorize]
+        [HttpGet]
+        public ActionResult CheckJwt()
         {
-            var payload = GoogleJsonWebSignature.ValidateAsync(tokenId, new GoogleJsonWebSignature.ValidationSettings()).Result;
+            return Ok();
+        }
+
+        [HttpPost("google")]
+        public ActionResult Google([FromBody] PostGoogleForm body)
+        {
+            var payload = GoogleJsonWebSignature.ValidateAsync(body.tokenId, new GoogleJsonWebSignature.ValidationSettings()).Result;
 
             var user = _authService.Authenticate(payload);
 
@@ -27,6 +35,11 @@ namespace Planitly.Backend.Controllers
             {
                 token = _jwtService.CreateJwt(user)
             });
+        }
+
+        public class PostGoogleForm
+        {
+            public string? tokenId { get; set; }
         }
     }
 }

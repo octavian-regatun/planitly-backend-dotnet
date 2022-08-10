@@ -27,5 +27,11 @@ namespace Planitly.Backend.Controllers
 
             return Ok();
         }
+        
+        [HttpGet]
+        public ActionResult GetAll([FromQuery(Name = "isAuthor")] bool isAuthor, [FromQuery(Name = "isParticipating")] bool isParticipating)
+        {
+            return Ok();
+        }
     }
 }

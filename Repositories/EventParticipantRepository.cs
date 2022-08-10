@@ -6,6 +6,7 @@ namespace Planitly.Backend.Repositories
     public interface IEventParticipantRepository
     {
         public EventParticipant? Save(EventParticipant eventParticipant);
+        public ICollection<Event> GetByAuthorId(string authorId);
     }
 
     public class EventParticipantRepository : IEventParticipantRepository
@@ -23,6 +24,13 @@ namespace Planitly.Backend.Repositories
             _dbContext.SaveChanges();
 
             return savedEventParticipant;
+        }
+
+        public ICollection<Event> GetByAuthorId(string authorId)
+        {
+            var eventParticipants = _dbContext.EventParticipant.Where(x => x.UserId == authorId && x.IsAuthor == true).ToList();
+
+            throw new NotImplementedException();
         }
     }
 }

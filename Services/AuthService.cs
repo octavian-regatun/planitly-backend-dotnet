@@ -2,20 +2,25 @@ using Google.Apis.Auth;
 using Planitly.Backend.Contexts;
 using Planitly.Backend.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using Planitly.Backend.Repositories;
 
 namespace Planitly.Backend.Services
 {
     public interface IAuthService
     {
-        User Authenticate(GoogleJsonWebSignature.Payload payload);
+        public User Authenticate(GoogleJsonWebSignature.Payload payload);
+        public User? GetLoggedUser(ClaimsPrincipal user);
     }
 
     public class AuthService : IAuthService
     {
         private DatabaseContext _db;
-        public AuthService(DatabaseContext db)
+        private IUserRepository _userRepository;
+        public AuthService(DatabaseContext db, IUserRepository userRepository)
         {
             this._db = db;
+            this._userRepository = userRepository;
         }
 
         public User Authenticate(GoogleJsonWebSignature.Payload payload)
@@ -23,6 +28,11 @@ namespace Planitly.Backend.Services
             var user = FindUserOrAdd(payload);
 
             return user;
+        }
+
+        public User? GetLoggedUser(ClaimsPrincipal user)
+        {
+            return _userRepository.GetById(user.FindFirstValue(ClaimTypes.NameIdentifier));
         }
 
         public string GenerateRandomUsername()
