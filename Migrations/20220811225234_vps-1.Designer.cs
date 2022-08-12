@@ -11,8 +11,8 @@ using Planitly.Backend.Contexts;
 namespace Planitly.Backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20220717120000_4")]
-    partial class _4
+    [Migration("20220811225234_vps-1")]
+    partial class vps1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,10 +30,6 @@ namespace Planitly.Backend.Migrations
                     b.Property<bool>("AllDay")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("AuthorId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("Color")
                         .HasColumnType("longtext");
 
@@ -46,7 +42,7 @@ namespace Planitly.Backend.Migrations
                     b.Property<DateTime>("EndAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<long>("LocationId")
+                    b.Property<long?>("LocationId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Picture")
@@ -63,8 +59,6 @@ namespace Planitly.Backend.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
 
                     b.HasIndex("LocationId");
 
@@ -219,19 +213,9 @@ namespace Planitly.Backend.Migrations
 
             modelBuilder.Entity("Planitly.Backend.Models.Event", b =>
                 {
-                    b.HasOne("Planitly.Backend.Models.User", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Planitly.Backend.Models.Location", "Location")
                         .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
+                        .HasForeignKey("LocationId");
 
                     b.Navigation("Location");
                 });
@@ -239,7 +223,7 @@ namespace Planitly.Backend.Migrations
             modelBuilder.Entity("Planitly.Backend.Models.EventParticipant", b =>
                 {
                     b.HasOne("Planitly.Backend.Models.Event", "Event")
-                        .WithMany()
+                        .WithMany("EventParticipants")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -272,6 +256,11 @@ namespace Planitly.Backend.Migrations
                     b.Navigation("Recipient");
 
                     b.Navigation("Requester");
+                });
+
+            modelBuilder.Entity("Planitly.Backend.Models.Event", b =>
+                {
+                    b.Navigation("EventParticipants");
                 });
 #pragma warning restore 612, 618
         }

@@ -14,7 +14,7 @@ namespace Planitly.Backend.Contexts
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = "server=localhost;user=root;password=root;database=planitly";
+            var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
             var serverVersion = ServerVersion.AutoDetect(connectionString);
 
             optionsBuilder.UseMySql(connectionString, serverVersion).LogTo(Console.WriteLine, LogLevel.Information).EnableSensitiveDataLogging().EnableDetailedErrors();

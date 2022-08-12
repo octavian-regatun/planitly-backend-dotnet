@@ -16,9 +16,7 @@
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7156;http://localhost:5146",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "JWT_SECRET": "3b33a8d6-9689-4939-a147-1438411082c6",
-        "DATABASE_URL": "Host=planitly.com;Database=planitly;Username=octavianregatun;Password=#Gibon923"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "IIS Express": {
@@ -26,9 +24,7 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "JWT_SECRET": "3b33a8d6-9689-4939-a147-1438411082c6",
-        "DATABASE_URL": "Host=planitly.com;Database=planitly;Username=octavianregatun;Password=#Gibon923"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
   }

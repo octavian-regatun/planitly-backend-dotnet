@@ -20,7 +20,9 @@
         "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
       },
       "env": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DATABASE_URL": "server=planitly.com;user=root;password=root;database=planitly",
+        "JWT_SECRET": "3b33a8d6-9689-4939-a147-1438411082c6"
       },
       "sourceFileMap": {
         "/Views": "${workspaceFolder}/Views"

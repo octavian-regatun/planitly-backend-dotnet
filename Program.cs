@@ -7,6 +7,8 @@ using Planitly.Backend.Repositories;
 using Planitly.Backend.Services;
 using Planitly.Backend.Utilities;
 
+StartupUtility.CheckConfigVars();
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -31,7 +33,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     };
                 });
 
-
 // Database Contexts
 builder.Services.AddDbContext<DatabaseContext>();
 
@@ -46,9 +47,6 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEventService, EventService>();
 
 var app = builder.Build();
-
-StartupUtility.Configure(app.Services.GetService<IConfiguration>());
-StartupUtility.CheckConfigVars();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
