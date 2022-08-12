@@ -1,6 +1,7 @@
 name: prod workflow
 
 on:
+  workflow_dispatch:
   push:
     branches: [develop]
 
