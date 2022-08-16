@@ -48,6 +48,9 @@ builder.Services.AddScoped<IEventService, EventService>();
 
 var app = builder.Build();
 
+app.UsePathBase(new PathString("/api"));
+app.UseRouting();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
