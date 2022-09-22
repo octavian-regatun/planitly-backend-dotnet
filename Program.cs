@@ -7,8 +7,6 @@ using Planitly.Backend.Repositories;
 using Planitly.Backend.Services;
 using Planitly.Backend.Utilities;
 
-StartupUtility.CheckConfigVars();
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -27,7 +25,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     cfg.TokenValidationParameters = new TokenValidationParameters()
                     {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET")!)),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string?>("JwtSecret")!)),
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };
@@ -47,6 +45,9 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEventService, EventService>();
 
 var app = builder.Build();
+
+StartupUtility.Configure(app.Services.GetService<IConfiguration>());
+StartupUtility.CheckConfigVars();
 
 app.UsePathBase(new PathString("/api"));
 app.UseRouting();
