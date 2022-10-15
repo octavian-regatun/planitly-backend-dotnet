@@ -14,10 +14,12 @@ namespace Planitly.Backend.Controllers
     {
         private IEventRepository _eventRepository;
         private IEventService _eventService;
-        public EventsController(IEventRepository eventsRepository, IEventService eventService)
+        private IFileService _fileService;
+        public EventsController(IEventRepository eventsRepository, IEventService eventService, IFileService fileService)
         {
             this._eventRepository = eventsRepository;
             this._eventService = eventService;
+            this._fileService = fileService;
         }
 
         [HttpPost]
@@ -27,10 +29,17 @@ namespace Planitly.Backend.Controllers
 
             return Ok();
         }
-        
+
         [HttpGet]
         public ActionResult GetAll([FromQuery(Name = "isAuthor")] bool isAuthor, [FromQuery(Name = "isParticipating")] bool isParticipating)
         {
+            return Ok();
+        }
+
+        [HttpGet("save-file")]
+        public async Task<ActionResult> SaveFile()
+        {
+            await _fileService.UploadImage();
             return Ok();
         }
     }

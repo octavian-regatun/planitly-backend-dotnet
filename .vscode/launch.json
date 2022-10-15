@@ -2,6 +2,19 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "dotnetwatchattach",
+      "request": "launch",
+      "name": ".NET Watch Attach",
+      "args": {
+        // Args to pass to coreclr attach
+        "env": {
+          "ASPNETCORE_ENVIRONMENT": "Development"
+        }
+      },
+      "task": "watch", // Label of watch task in tasks.json
+      "program": "${workspaceFolder}/bin/Debug/net6.0/planitly-backend-dotnet.dll" // for windows Or "<startup-project-name>" for linux
+    },
+    {
       // Use IntelliSense to find out which attributes exist for C# debugging
       // Use hover for the description of the existing attributes
       // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
@@ -15,10 +28,10 @@
       "cwd": "${workspaceFolder}",
       "stopAtEntry": false,
       // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
-      "serverReadyAction": {
-        "action": "openExternally",
-        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-      },
+      // "serverReadyAction": {
+      //   "action": "openExternally",
+      //   "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+      // },
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DATABASE_URL": "server=planitly.com;user=root;password=root;database=planitly",
