@@ -11,6 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - uses: microsoft/variable-substitution@v1 
+        with:
+          files: 'appsettings.json, appsettings.Development.json'
+        env:
+          JwtSecret: "3b33a8d6-9689-4939-a147-1438411082c6"
+
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
