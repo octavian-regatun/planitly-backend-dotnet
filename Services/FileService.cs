@@ -1,34 +1,41 @@
-using Amazon.S3;
+using Firebase.Auth;
+using Firebase.Storage;
 
 namespace Planitly.Backend.Services
 {
     public interface IFileService
     {
-        public Task UploadImage();
+        public Task<string> UploadEventPicture(Stream stream);
+        public Stream Base64ToStream(string base64);
     }
 
     public class FileService : IFileService
     {
-        IConfiguration? _config;
-        AmazonS3Client _s3Client;
-        public FileService(IConfiguration? config)
+        public string? firebaseToken;
+        IConfiguration _configuration;
+        public FileService(IConfiguration configuration)
         {
-            this._config = config;
-            var accessKey = _config.GetValue<string?>("ScaleWayAccessKey");
-            var secretKey = _config.GetValue<string?>("ScaleWayAccessKey");
+            _configuration = configuration;
 
-            var s3Config = new AmazonS3Config() { ServiceURL = "https://planitly.s3.fr-par.scw.cloud" };
-
-            this._s3Client = new AmazonS3Client(
-                accessKey, secretKey, s3Config
-            );
+            var firebaseApiKey = _configuration.GetValue<string?>("FirebaseApiKey");
+            var authProvider = new FirebaseAuthProvider(new FirebaseConfig(firebaseApiKey));
+            this.firebaseToken = authProvider.SignInAnonymouslyAsync().Result.FirebaseToken;
         }
 
-        public async Task UploadImage()
+        public async Task<string> UploadEventPicture(Stream stream)
         {
-            var x = await this._s3Client.ListBucketsAsync();
-            var y = x.Buckets;
-            int i;
+            var url = await new FirebaseStorage("planitly.appspot.com", new FirebaseStorageOptions
+            {
+                AuthTokenAsyncFactory = () => Task.FromResult(this.firebaseToken),
+                ThrowOnCancel = true,
+            }).Child("eventPictures").Child(Nanoid.Nanoid.Generate("1234567890abcdef", 10)).PutAsync(stream);
+
+            return url;
+        }
+
+        public Stream Base64ToStream(string base64)
+        {
+            return new MemoryStream(Convert.FromBase64String(base64));
         }
     }
 }

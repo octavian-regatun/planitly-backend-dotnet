@@ -14,17 +14,22 @@ namespace Planitly.Backend.Controllers
     {
         private IEventRepository _eventRepository;
         private IEventService _eventService;
-        private IFileService _fileService;
-        public EventsController(IEventRepository eventsRepository, IEventService eventService, IFileService fileService)
+        private IFileService _firebaseService;
+        public EventsController(IEventRepository eventsRepository, IEventService eventService, IFileService firebaseService)
         {
             this._eventRepository = eventsRepository;
             this._eventService = eventService;
-            this._fileService = fileService;
+            this._firebaseService = firebaseService;
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] Event @event)
+        public async Task<ActionResult> Post([FromBody] Event @event)
         {
+            if (@event.Picture != null)
+            {
+                @event.Picture = await _firebaseService.UploadEventPicture(_firebaseService.Base64ToStream(@event.Picture));
+            }
+
             var savedEvent = _eventService.CreateEvent(@event, User);
 
             return Ok();
@@ -33,13 +38,6 @@ namespace Planitly.Backend.Controllers
         [HttpGet]
         public ActionResult GetAll([FromQuery(Name = "isAuthor")] bool isAuthor, [FromQuery(Name = "isParticipating")] bool isParticipating)
         {
-            return Ok();
-        }
-
-        [HttpGet("save-file")]
-        public async Task<ActionResult> SaveFile()
-        {
-            await _fileService.UploadImage();
             return Ok();
         }
     }
