@@ -37,16 +37,7 @@ namespace Planitly.Backend.Services
 
         public string GenerateRandomUsername()
         {
-            var charList = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            var username = new char[8];
-            var random = new Random();
-
-            for (int i = 0; i < username.Length; i++)
-            {
-                username[i] = charList[random.Next(charList.Length)];
-            }
-
-            return new String(username);
+            return Nanoid.Nanoid.Generate("1234567890abcdef", 10);
         }
 
         private User FindUserOrAdd(GoogleJsonWebSignature.Payload payload)
