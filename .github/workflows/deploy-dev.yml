@@ -15,7 +15,9 @@ jobs:
         with:
           files: 'appsettings.json'
         env:
-          JwtSecret: "3b33a8d6-9689-4939-a147-1438411082c6"
+          ConnectionStrings.DefaultConnection: ${{ secrets.DEFAULT_CONNECTION }}
+          JwtSecret: ${{ secrets.JWT_SECRET }}
+          FirebaseApiKey: ${{ secrets.FIREBASE_API_KEY }}
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
