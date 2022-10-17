@@ -6,7 +6,7 @@ namespace Planitly.Backend.Services
     public interface IFileService
     {
         public Task<string> UploadEventPicture(Stream stream);
-        public Stream Base64ToStream(string base64);
+        public Stream ImageBase64ToStream(string base64);
     }
 
     public class FileService : IFileService
@@ -33,9 +33,12 @@ namespace Planitly.Backend.Services
             return url;
         }
 
-        public Stream Base64ToStream(string base64)
+        public Stream ImageBase64ToStream(string base64)
         {
-            return new MemoryStream(Convert.FromBase64String(base64));
+            var metadata = base64.Split(',')[0];
+            var data = base64.Split(',')[1];
+            
+            return new MemoryStream(Convert.FromBase64String(data));
         }
     }
 }
