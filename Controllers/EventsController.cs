@@ -38,6 +38,8 @@ namespace Planitly.Backend.Controllers
         [HttpGet]
         public ActionResult GetAll([FromQuery(Name = "isAuthor")] bool isAuthor, [FromQuery(Name = "isParticipating")] bool isParticipating)
         {
+            var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+            
             return Ok();
         }
     }

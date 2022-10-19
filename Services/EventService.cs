@@ -8,6 +8,7 @@ namespace Planitly.Backend.Services
     public interface IEventService
     {
         public Event? CreateEvent(Event @event, ClaimsPrincipal user);
+        public List<Event> GetEvents(ClaimsPrincipal user, bool isAuthor, bool isParticipating);
     }
     public class EventService : IEventService
     {
@@ -39,14 +40,23 @@ namespace Planitly.Backend.Services
             return savedEvent;
         }
 
-        public ICollection<Event> GetEvents(ClaimsPrincipal user, bool isAuthor, bool isParticipating)
+        public List<Event> GetEvents(ClaimsPrincipal user, bool isAuthor, bool isParticipating)
         {
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var eventsAsAuthor = this._eventParticipantRepository.GetByAuthorId(userId);
-            Console.WriteLine(eventsAsAuthor);
+            List<Event> eventList = new List<Event>();
+            if (isAuthor)
+            {
+                var eventsAsAuthor = this._eventParticipantRepository.GetByAuthorId(userId);
+                eventList.Union(eventsAsAuthor);
+            }
+            if (isParticipating)
+            {
+                var eventsAsParticipant = this._eventParticipantRepository.GetByParticipantId(userId);
+                eventList.Union(eventsAsParticipant);
+            }
 
-            throw new NotImplementedException();
+            return eventList;
         }
     }
 }

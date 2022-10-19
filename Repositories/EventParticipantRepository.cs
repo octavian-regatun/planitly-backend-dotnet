@@ -7,6 +7,7 @@ namespace Planitly.Backend.Repositories
     {
         public EventParticipant? Save(EventParticipant eventParticipant);
         public ICollection<Event> GetByAuthorId(string authorId);
+        public ICollection<Event> GetByParticipantId(string participantId);
     }
 
     public class EventParticipantRepository : IEventParticipantRepository
@@ -28,9 +29,16 @@ namespace Planitly.Backend.Repositories
 
         public ICollection<Event> GetByAuthorId(string authorId)
         {
-            var eventParticipants = _dbContext.EventParticipant.Where(x => x.UserId == authorId && x.IsAuthor == true).ToList();
+            var events = _dbContext.EventParticipant.Where(x => x.UserId == authorId && x.IsAuthor == true).Select(x => x.Event).ToList();
 
-            throw new NotImplementedException();
+            return events;
+        }
+
+        public ICollection<Event> GetByParticipantId(string participantId)
+        {
+            var events = _dbContext.EventParticipant.Where(x => x.UserId == participantId && x.IsAuthor == false).Select(x => x.Event).ToList();
+
+            return events;
         }
     }
 }
