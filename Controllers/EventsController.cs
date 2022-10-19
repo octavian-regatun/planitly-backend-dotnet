@@ -27,7 +27,7 @@ namespace Planitly.Backend.Controllers
         {
             if (@event.Picture != null)
             {
-                @event.Picture = await _firebaseService.UploadEventPicture(_firebaseService.Base64ToStream(@event.Picture));
+                @event.Picture = await _firebaseService.UploadEventPicture(_firebaseService.ImageBase64ToStream(@event.Picture));
             }
 
             var savedEvent = _eventService.CreateEvent(@event, User);
